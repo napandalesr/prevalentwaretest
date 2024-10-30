@@ -10,7 +10,7 @@ type Props = {
 const IsAuthentication = ({ children }: Props) => {
   const { status } = useSession();
   useEffect(() => {
-    status !== "authenticated" && signIn('auth0')
+    //status !== "authenticated" && signIn('auth0')
   }, []);
   return <>{children}</>;
 };
