@@ -1,0 +1,1 @@
+export type NavBarType = 'ingresos-egresos' | 'usuarios' | 'reportes';
