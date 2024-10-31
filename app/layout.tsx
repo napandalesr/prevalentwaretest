@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import client from "./apollo-client";
-
-import { NextAuthProvider } from "@/config/NextAuthProvider";
-import Navbar from "@/components/Navbar";
 
 import "./globals.css";
-import { ApolloProvider } from "@apollo/client";
 import { Provider } from "@/config/Provider";
 
 const geistSans = localFont({

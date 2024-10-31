@@ -3,6 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { gql, useQuery } from "@apollo/client";
+import { signIn } from "next-auth/react";
 
 const HELLO_QUERY = gql`
   query Hello {
@@ -18,7 +19,7 @@ export default function Home() {
   if (error) return <p>Error: {error.message}</p>;
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      {/*<button onClick={() => signIn('auth0')}>Iniciar Sesión</button>*/}
+      <button onClick={() => signIn('auth0')}>Iniciar Sesión</button>
       <p>{data.hello}</p>
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <Image
