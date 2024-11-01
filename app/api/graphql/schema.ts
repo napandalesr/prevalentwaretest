@@ -11,11 +11,11 @@ const typeDefs = `#graphql
     ADMIN
   }
 
-
   type Query {
     hello: String
     findUsers: [User!]!
     findOneUser(id: ID!): User!
+    findOneEmail(email: String!): User!
   }
 
   type Mutation {

@@ -4,10 +4,11 @@ import React, {useState} from 'react';
 import Link from 'next/link';
 
 import { NavBarType } from '@/types/navBar';
-
+import { PersonCircle } from 'react-bootstrap-icons';
 
 const Navbar = () => {
   const [location, setLocation] = useState<NavBarType>('ingresos-egresos')
+  const [singOut, setSingOut] = useState<boolean>(false)
   return (
     <nav className='shadow-md flex fixed top-0 z-40 gap-4 md:gap-0 items-center justify-between w-screen bg-white text-custom-primary px-6 md:px-16 2xl:pl-40 text-base xl:text-lg min-h-16'>
       <div
@@ -25,6 +26,19 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
+      <button>
+        <PersonCircle size={30} onClick={()=> setSingOut(!singOut)}/>
+          {
+            singOut && <section className='bg-white shadow-md rounded-lg fixed right-[3%] top-14 z-10 w-52'>
+              <button className='inline-flex py-1'>
+                Salir 
+                <span className='ml-2 w-6 h-6 border-2 border-custom-accents rounded-full flex relative'>
+                  <span className='h-4 w-1 flex -mt-1 bg-custom-text absolute left-1/2 -translate-x-1/2 rounded-md'></span>
+                </span>
+              </button>
+            </section>
+          }
+      </button>
     </nav>
   );
 };

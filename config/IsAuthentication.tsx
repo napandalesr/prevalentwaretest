@@ -1,7 +1,6 @@
 "use client";
 
 import { signIn, useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 type Props = {
   children?: React.ReactNode;
@@ -9,10 +8,17 @@ type Props = {
 
 const IsAuthentication = ({ children }: Props) => {
   const { status } = useSession();
-  useEffect(() => {
-    //status !== "authenticated" && signIn('auth0')
-  }, []);
-  return <>{children}</>;
+
+  if (status == "loading") {
+    return <div>Cargando...</div>
+  }
+
+  if (status === "unauthenticated") {
+    signIn('auth0');
+    return <div>redirigiendo...</div>
+  }
+
+  return children
 };
 
 export default IsAuthentication;
