@@ -18,3 +18,8 @@ export type dataSourceUser = {
   phone: string;
   ations: string;
 }
+/**{
+  lang: Locale,
+  s: { [key: string]: any },
+  customColors?: { text: string, bg: string }
+} */
