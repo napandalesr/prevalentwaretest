@@ -12,6 +12,12 @@ const resolvers = {
       include: {
         user: true,
       }
+    }),
+    getLastMovements: async (_: any, args: { limit: number }) => await prisma.movement.findMany({
+      take: args.limit,
+        orderBy: {
+          date: 'desc',
+        },
     })
   },
   Mutation: {

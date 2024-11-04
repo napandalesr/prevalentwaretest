@@ -1,49 +1,46 @@
 "use client"
 
 import React, { useEffect, useState } from "react";
-import { gql, useMutation, useQuery } from "@apollo/client";
-import { useSession } from "next-auth/react";
 import Table from "@/containers/Table";
-import { columnType, dataSourceMovement } from "@/types/table";
+import { columnType } from "@/types/table";
 import ModalIncome from "@/containers/ModalIncome";
 import Loading from "@/components/Loading";
+import { useGetMovements } from "@/hooks/queries/useGetMovements";
+import { MovementType } from "@/types/movement";
+import { userCreateMovement } from "@/hooks/mutations/userCreateMovement";
+import Alert from "@/components/Alert";
+import { useSession } from "next-auth/react";
 
-const FindMovement = gql`
-  query FindMovement {
-    findMovement{
-      id
-      concept
-      amount
-      date
-      user {
-        name
-        id
-      }
-      type
-    }
-  }
-`;
-
-const CreateMovement = gql`
-mutation CreateMovement($input: CreateMovementInput!) {
-  createMovement(input: $input) {
-    amount
-    concept
-    date
-    type
-  }
-}
-`;
-
-type findMovementType = {
-  findMovement: dataSourceMovement[]
-}
+const columns: columnType[] = [
+  {
+    key: "1",
+    title: "Concepto"
+  },
+  {
+    key: "2",
+    title: "Monto"
+  },
+  {
+    key: "3",
+    title: "Fecha"
+  },
+  {
+    key: "4",
+    title: "Usuario"
+  },
+];
 
 export default function Home() {
   const [showForm, setShowForm] = useState<boolean>(false);
+  const [activeAlert, setActiveAlert] = useState<{key: number, active: boolean, message: string, type: 'success' | 'error'}>({
+    key: 0,
+    active: false,
+    message: '',
+    type: 'success'
+  }); 
   const [total, setTotal] = useState<number>(0);
-  const { data, loading, error, refetch } = useQuery<findMovementType>(FindMovement);
-  const [createMovement, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(CreateMovement);
+  const { findMovement, loadingMovement, errorMovement, refetchMovement } = useGetMovements();
+  const { useHandleCreateMovement, mutationLoading } = userCreateMovement()
   const { data: session, status } = useSession();
   
 
@@ -52,71 +49,60 @@ export default function Home() {
   }, [session])
 
   useEffect(() => {
-    if(data) {
+    if(findMovement) {
       let tot = 0;
-      data.findMovement.map(item => {
+      findMovement.map(item => {
         tot += parseFloat(item.amount);
       })
       setTotal(tot);
     }
-  }, [data])
+  }, [findMovement])
 
-  if (loading) return <Loading text="Cargando..." type="spinningBubbles"/>
-  if (error) return <p>Error: {error.message}</p>;
+  if (loadingMovement) return <Loading text="Cargando..." type="spinningBubbles"/>
+  if (errorMovement) return <p>Error: {errorMovement.message}</p>;
 
-  const handleCreateMovement = async (data: any) => {
-    const { amount, concept, date, type, userId } = data;
-    await createMovement({
-      variables: {
-        input: {
-          amount: parseFloat(amount),
-          concept,
-          date,
-          type,
-          userId
-        }
+  const handleCreateMovement = async (data: MovementType) => {
+    try {
+      const response = await useHandleCreateMovement(data);
+      if(response.data) {
+        setActiveAlert({
+          key: activeAlert.key+1,
+          active: true,
+          message: "Datos guardados correctamente",
+          type: 'success'
+        });
       }
-    });
-    setShowForm(false);
-    refetch();
+      setShowForm(false);
+      refetchMovement();
+    } catch (error) {
+      console.log('Error '+error);
+      setActiveAlert({
+        key: activeAlert.key+1,
+        active: true,
+        message: "Hubo un error",
+        type: 'error'
+      });
+    }
   }
-
-  const columns: columnType[] = [
-    {
-      key: "1",
-      title: "Concepto"
-    },
-    {
-      key: "2",
-      title: "Monto"
-    },
-    {
-      key: "3",
-      title: "Fecha"
-    },
-    {
-      key: "4",
-      title: "Usuario"
-    },
-  ];
-
+  
   const hideForm = () => {
     setShowForm(false);
   }
 
   return (
     <>
+    <Alert key={activeAlert.key} type={activeAlert.type} text={activeAlert.message} active={activeAlert.active}/>
       { showForm && <ModalIncome handleCreateMovement={handleCreateMovement} hide={hideForm}/>}
       {
         mutationLoading && <Loading text="Cargando..." type="spinningBubbles"/>
       }
-      <main className=" mt-28">
+      <main className=" my-28">
         <section className="w-[80%] mx-auto flex justify-between text-custom-primary">
           <h3 className="text-2xl font-bold">Lista de ingresos y egresos</h3>
           <button className="px-4 py-2 bg-custom-secondary rounded text-white font-bold" onClick={() => setShowForm(true)}>Nuevo</button>
         </section>
         {
-          data && <Table columns={columns} datasource={data.findMovement}/>
+          findMovement && <Table columns={columns} datasource={findMovement}/>
         }
         
         <section className="w-[80%] mx-auto mt-8 text-right text-custom-accents">

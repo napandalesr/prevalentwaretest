@@ -5,27 +5,24 @@ import { X } from 'react-bootstrap-icons';
 
 import { TextField } from '@/components/Textfield';
 import { Selectfield } from '@/components/Selectfield';
+import { userType } from '@/types/user';
 
 type props = {
   hide: () => void,
   handleUpdateUser: (data: any) => void,
   name: string,
-  role: string,
+  role: "USER" | "ADMIN",
   id: string,
   phone: string
 }
 
 const ModalUser = ({ hide, handleUpdateUser, name, role, id, phone }: props) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<userType>({
     updateUserId: id,
     name: name,
     role: role,
     phone: phone
   });
-
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData])
 
   const handleChange = (name: string, value: string | number) => {
     setFormData({

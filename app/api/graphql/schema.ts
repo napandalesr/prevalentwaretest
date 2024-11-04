@@ -40,6 +40,7 @@ const typeDefs = `#graphql
     findOneUser(id: ID!): User!
     findOneEmail(email: String!): User!
     findMovement: [Movement!]!
+    getLastMovements(limit: Int!): [Movement!]!
   }
 
   type Mutation {
