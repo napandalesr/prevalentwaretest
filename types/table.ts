@@ -5,10 +5,18 @@ export type columnType = {
 
 export type dataSourceMovement = {
   key: number;
-  concep: string;
+  concept: string;
   amount: string;
   date: string;
-  user: string;
+  type: 'INCOME' | 'EXPENSE';
+  user: userType;
+}
+
+export type userType = {
+  id?: string;
+  name: string;
+  email?: string;
+  role?: "USER" | "ADMIN";
 }
 
 export type dataSourceUser = {
@@ -16,10 +24,5 @@ export type dataSourceUser = {
   name: string;
   email: string;
   phone: string;
-  ations: string;
+  actions: React.ReactNode;
 }
-/**{
-  lang: Locale,
-  s: { [key: string]: any },
-  customColors?: { text: string, bg: string }
-} */

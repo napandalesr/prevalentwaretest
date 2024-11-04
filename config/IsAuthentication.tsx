@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { signIn, useSession } from "next-auth/react";
 
 type Props = {
@@ -10,12 +11,12 @@ const IsAuthentication = ({ children }: Props) => {
   const { status } = useSession();
 
   if (status == "loading") {
-    return <div>Cargando...</div>
+    return <Loading text="Cargando..." type="bars"/>
   }
 
   if (status === "unauthenticated") {
     signIn('auth0');
-    return <div>redirigiendo...</div>
+    return <Loading text="Redirigiendo" type="bars"/>
   }
 
   return children

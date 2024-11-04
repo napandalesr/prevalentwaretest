@@ -12,9 +12,9 @@ const Navbar = () => {
   return (
     <nav className='shadow-md flex fixed top-0 z-40 gap-4 md:gap-0 items-center justify-between w-screen bg-white text-custom-primary px-6 md:px-16 2xl:pl-40 text-base xl:text-lg min-h-16'>
       <div
-        className='flex items-center justify-start md:justify-center lg:justify-between xl:mx-auto md:w-[80%] min-w-20'>
+        className='flex items-center justify-between xl:mx-auto w-[80%] min-w-20'>
         <Link href='/'>Logo</Link>
-        <ul className={`py-16 top-16 left-0 lg:left-auto lg:w-auto lg:top-auto lg:py-0 bg-white lg:bg-transparent w-full transition-all duration-300 ease-in-out pointer-events-auto absolute lg:relative flex flex-col lg:flex-row items-center justify-end gap-16`}>
+        <ul className={` bg-transparent w-full transition-all duration-300 ease-in-out pointer-events-auto relative flex items-center justify-end gap-16`}>
           <li className={`${location === "ingresos-egresos" && "text-custom-red font-bold"}`}>
             <Link href={'/'} onClick={() => setLocation('ingresos-egresos')}>Ingresos y egresos</Link>
           </li>

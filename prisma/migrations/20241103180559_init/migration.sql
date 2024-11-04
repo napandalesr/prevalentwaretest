@@ -20,7 +20,7 @@ CREATE TABLE "Movement" (
     "id" SERIAL NOT NULL,
     "concept" TEXT NOT NULL,
     "amount" DOUBLE PRECISION NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "date" TEXT,
     "userId" INTEGER NOT NULL,
     "type" "MovementType" NOT NULL,
 
