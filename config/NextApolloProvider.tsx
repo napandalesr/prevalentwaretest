@@ -1,7 +1,5 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
-import IsAuthentication from "./IsAuthentication";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/app/apollo-client";
 

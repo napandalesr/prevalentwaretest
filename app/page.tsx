@@ -3,14 +3,13 @@
 import React, {  useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import Table from "@/containers/Table";
-import { columnType } from "@/types/table";
-import ModalIncome from "@/containers/ModalIncome";
-import Loading from "@/components/Loading";
+import { Table, ModalIncome } from "@/containers";
 import { useGetMovements } from "@/hooks/queries/useGetMovements";
-import { MovementType } from "@/types/movement";
 import { useCreateMovement } from "@/hooks/mutations/useCreateMovement";
+import Loading from "@/components/Loading";
 import Alert from "@/components/Alert";
+import { columnType, MovementType } from "@/types";
+
 
 const columns: columnType[] = [
   {
