@@ -9,6 +9,7 @@ type props = {
   datasource: dataSourceMovement[];
 };
 
+/**Tabla para la lista de movimientos */
 const Table = memo(({ columns, datasource }: props) => {
   return <table className='w-[80%] mx-auto mt-8'>
   <thead className='border-b-2 border-b-custom-secondary text-custom-red'>

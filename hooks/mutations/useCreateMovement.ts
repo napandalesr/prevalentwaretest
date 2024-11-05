@@ -13,11 +13,11 @@ mutation CreateMovement($input: CreateMovementInput!) {
 }
 `;
 
-export const userCreateMovement = (): {
+export const useCreateMovement = (): {
   useHandleCreateMovement: (data: MovementType) => Promise<FetchResult<any>>;
   mutationLoading: boolean;
 } => {
-  const [createMovement, { data: mutationData, loading: mutationLoading, error: mutationError }] = useMutation(CreateMovement);
+  const [createMovement, { loading: mutationLoading }] = useMutation(CreateMovement);
 
   const useHandleCreateMovement = async (data: MovementType) => {
     const { amount, concept, date, type, userId } = data;

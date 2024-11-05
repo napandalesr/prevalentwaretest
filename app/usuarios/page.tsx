@@ -1,6 +1,8 @@
 "use client"
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
 
 import TableUsers from '@/containers/TableUsers';
 import { columnType } from '@/types/table';
@@ -10,6 +12,8 @@ import { useGetUsers } from '@/hooks/queries/useGetUsers';
 import { dataSourceUser, userType } from '@/types/user';
 import { useUpdateUser } from '@/hooks/mutations/useUpdateUser';
 import Alert from '@/components/Alert';
+
+import { useFindByEmail } from '@/hooks/queries/useGetUserByEmail';
 
 const columns: columnType[] = [
   {
@@ -47,7 +51,19 @@ const Users = () => {
   const { dataSourceUsers, loadingUsers, errorUsers, refetchUsers } = useGetUsers();
   const [datasource, setDatasource] = useState<dataSourceUser[]>();
   const { useHandleUpdateUser, mutationUserUpdateLoading } = useUpdateUser();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
+  /**Redirigir a la página de inicio si no es administrador */
+  useEffect(() => {
+    if(session) {
+      if (status === "authenticated" && session.user.role !== "ADMIN") {
+        router.push("/");
+      }
+    }
+  }, [session, status, router]);
+
+  /**Ocultar modal que contiene el formulario de usuarios */
   const hide = () => {
     setShowForm({
       ...showForm,
@@ -55,6 +71,7 @@ const Users = () => {
     });
   };
 
+  /**Se agrega el botón editar a cada una de las filas */
   useEffect(() => {
     if(dataSourceUsers) {
       const newData: dataSourceUser[] = []
@@ -70,10 +87,12 @@ const Users = () => {
     }
   }, [dataSourceUsers]);
   
+  /**Loading mientrar carga la lista de movimientos */
   if (loadingUsers) return <Loading text="Cargando..." type="spinningBubbles"/>
   if (errorUsers) return <p>Error: {errorUsers.message}</p>;
 
-  const handleUpdateUser = async (data: any) => {
+  /**Actualización de datos de usuario */
+  const handleUpdateUser = async (data: userType) => {
     try {
       const response = await useHandleUpdateUser(data);
       if(response.data) {
@@ -101,6 +120,7 @@ const Users = () => {
   }
 
   return <main className=" my-28">
+    {/**Componente para mostrar alerta de éxito o error de consultas */}
     <Alert key={activeAlert.key} type={activeAlert.type} text={activeAlert.message} active={activeAlert.active}/>
     {
       mutationUserUpdateLoading && <Loading text="Cargando..." type="spinningBubbles"/>

@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -17,6 +19,7 @@ import { useGetMovements } from '@/hooks/queries/useGetMovements';
 import { useGetLasMovements } from '@/hooks/queries/useGetLasMovements';
 import Csv from '@/components/Csv';
 import { graphType } from '@/types/chart';
+import { useFindByEmail } from '@/hooks/queries/useGetUserByEmail';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -24,11 +27,20 @@ const Reports = () => {
   const [datasource, setDatasource] = useState<graphType>();
   const { findMovement, loadingMovement, errorMovement } = useGetMovements();
   const { getLastMovements, loadingGetLastMovements, errorGetLastMovements, refetch } = useGetLasMovements();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
+  /**Redirigir a la página de inicio si no es administrador */
   useEffect(() => {
-    refetch();
-  }, [])
+    if(session) {
+      if (status === "authenticated" && session.user.role !== "ADMIN") {
+        router.push("/");
+      }
+    }
+  }, [session, status]);
   
+  
+  /**Actualización de datos para la grafica con últimos 4 movimientos al rendizar nuevamenta la pagina */
   useEffect(() => {
     if(getLastMovements) {
       const labels: any[] = [];
@@ -39,7 +51,7 @@ const Reports = () => {
         }
         dataNumbers.push(item.amount)
         labels.push(item.date);
-      })
+      });
       setDatasource({
         labels: labels,
         datasets: [
@@ -49,8 +61,9 @@ const Reports = () => {
             backgroundColor: 'rgba(75, 192, 192, 0.6)',
           },
         ],
-      })
+      });
     }
+    refetch();
   }, [getLastMovements]);
 
   if (loadingMovement || loadingGetLastMovements) return <Loading text="Cargando..." type="spinningBubbles"/>

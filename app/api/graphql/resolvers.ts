@@ -8,7 +8,7 @@ const resolvers = {
     findUsers: async () => await prisma.user.findMany(),
     findOneUser: async (_: any, args: { id: string; }) => await prisma.user.findUnique({ where: { id: Number(args.id) } }),
     findOneEmail: async (_: any, args: { email: string; }) => await prisma.user.findUnique({ where: { email: args.email } }),
-    findMovement: async (_: any, args: { offset: number; limit: number }) => await prisma.movement.findMany({
+    findMovement: async () => await prisma.movement.findMany({
       include: {
         user: true,
       }
@@ -21,7 +21,7 @@ const resolvers = {
     })
   },
   Mutation: {
-    createUser: async (_: any, args: { email: string; name: string; phone: string, role: string }) => {
+    createUser: async (_: any, args: { email: string; name: string; phone: string, role: 'ADMIN' | "USER" }) => {
       return await prisma.user.create(
         { data: { email: args.email, name: args.name,  phone: args.phone,  role: args.role} }
       );
@@ -33,7 +33,7 @@ const resolvers = {
           { amount: amount, concept: concept, type: type, date, user: {connect : {id: parseInt(userId)} } } }
       );
     },
-    updateUser: async (_: any, args: { id: string, name: string, role: string, phone: string }) => await prisma.user.update({
+    updateUser: async (_: any, args: { id: string, name: string, role: 'ADMIN' | "USER", phone: string }) => await prisma.user.update({
       where: {
         id: parseInt(args.id)
       },

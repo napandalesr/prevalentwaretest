@@ -2,7 +2,7 @@ const typeDefs = `#graphql
   type User {
     id: ID!
     email: String!
-    name: String
+    name: String!
     phone: String
     role: Role!
   }
@@ -38,13 +38,13 @@ const typeDefs = `#graphql
     hello: String
     findUsers: [User!]!
     findOneUser(id: ID!): User!
-    findOneEmail(email: String!): User!
+    findOneEmail(email: String!): User
     findMovement: [Movement!]!
     getLastMovements(limit: Int!): [Movement!]!
   }
 
   type Mutation {
-    createUser(email: String!, name: String!, role:Role! ): User!,
+    createUser(email: String!, name: String!, phone: String, role:Role! ): User!,
     updateUser(id: String!, name: String!, role: Role, phone: String ): User!,
     createMovement(input: CreateMovementInput!): Movement!
   }

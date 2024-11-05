@@ -16,6 +16,7 @@ type props = {
   phone: string
 }
 
+/**Modal para el formulario de actualización de usuario */
 const ModalUser = ({ hide, handleUpdateUser, name, role, id, phone }: props) => {
   const [formData, setFormData] = useState<userType>({
     updateUserId: id,
@@ -24,6 +25,7 @@ const ModalUser = ({ hide, handleUpdateUser, name, role, id, phone }: props) => 
     phone: phone
   });
 
+  /**Se obtienen el texto digitado en el formulario */
   const handleChange = (name: string, value: string | number) => {
     setFormData({
       ...formData,
@@ -31,9 +33,10 @@ const ModalUser = ({ hide, handleUpdateUser, name, role, id, phone }: props) => 
     });
   };
   
+  /**Envía de datos para actualizar el usuario */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleUpdateUser({...formData})
+    handleUpdateUser({...formData});
   };
 
   return <section className='fixed left-0 top-0 w-screen h-screen bg-black/50 flex items-center justify-center'>

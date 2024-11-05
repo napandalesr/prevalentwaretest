@@ -1,15 +1,16 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+
 import Table from "@/containers/Table";
 import { columnType } from "@/types/table";
 import ModalIncome from "@/containers/ModalIncome";
 import Loading from "@/components/Loading";
 import { useGetMovements } from "@/hooks/queries/useGetMovements";
 import { MovementType } from "@/types/movement";
-import { userCreateMovement } from "@/hooks/mutations/userCreateMovement";
+import { useCreateMovement } from "@/hooks/mutations/useCreateMovement";
 import Alert from "@/components/Alert";
-import { useSession } from "next-auth/react";
 
 const columns: columnType[] = [
   {
@@ -40,14 +41,10 @@ export default function Home() {
   }); 
   const [total, setTotal] = useState<number>(0);
   const { findMovement, loadingMovement, errorMovement, refetchMovement } = useGetMovements();
-  const { useHandleCreateMovement, mutationLoading } = userCreateMovement()
-  const { data: session, status } = useSession();
-  
+  const { useHandleCreateMovement, mutationLoading } = useCreateMovement()
+  const { data: session } = useSession();
 
-  useEffect(() => {
-    console.log("session", session);
-  }, [session])
-
+  /**Calcula la suma de movimientos */
   useEffect(() => {
     if(findMovement) {
       let tot = 0;
@@ -56,11 +53,13 @@ export default function Home() {
       })
       setTotal(tot);
     }
-  }, [findMovement])
+  }, [findMovement]);
 
+  /**Loading mientrar carga la lista de movimientos */
   if (loadingMovement) return <Loading text="Cargando..." type="spinningBubbles"/>
   if (errorMovement) return <p>Error: {errorMovement.message}</p>;
 
+  /**Crear un nuevo movimiento */
   const handleCreateMovement = async (data: MovementType) => {
     try {
       const response = await useHandleCreateMovement(data);
@@ -85,12 +84,14 @@ export default function Home() {
     }
   }
   
+  /**Ocultar modal de formulario */
   const hideForm = () => {
     setShowForm(false);
   }
 
   return (
     <>
+    {/**Componente para mostrar alerta de éxito o error de consultas */}
     <Alert key={activeAlert.key} type={activeAlert.type} text={activeAlert.message} active={activeAlert.active}/>
       { showForm && <ModalIncome handleCreateMovement={handleCreateMovement} hide={hideForm}/>}
       {
@@ -99,12 +100,13 @@ export default function Home() {
       <main className=" my-28">
         <section className="w-[80%] mx-auto flex justify-between text-custom-primary">
           <h3 className="text-2xl font-bold">Lista de ingresos y egresos</h3>
-          <button className="px-4 py-2 bg-custom-secondary rounded text-white font-bold" onClick={() => setShowForm(true)}>Nuevo</button>
+          {
+            session?.user.role === 'ADMIN' && <button className="px-4 py-2 bg-custom-secondary rounded text-white font-bold" onClick={() => setShowForm(true)}>Nuevo</button>
+          }
         </section>
         {
           findMovement && <Table columns={columns} datasource={findMovement}/>
         }
-        
         <section className="w-[80%] mx-auto mt-8 text-right text-custom-accents">
           <span className="px-6 py-2 bg-black/5">Total: $ {total}</span>
         </section>

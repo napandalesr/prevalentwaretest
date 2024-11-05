@@ -14,6 +14,7 @@ const IsAuthentication = ({ children }: Props) => {
     return <Loading text="Cargando..." type="bars"/>
   }
 
+  /**Si el usuario no está autenticado se redirige al formulario de autenticación */
   if (status === "unauthenticated") {
     signIn('auth0');
     return <Loading text="Redirigiendo" type="bars"/>

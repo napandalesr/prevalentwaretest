@@ -9,10 +9,12 @@ type props = {
   findMovement: dataSourceMovement[]
 }
 
+/**Descarga del CSV */
 const Csv = ({ findMovement }: props) => {
   const [datasourceCVS, setDatasourceCVS] = useState<string[][]>();
   const [total, setTotal] = useState<number>(0);
 
+  /**Recopilación de datos para el .CSV */
   useEffect(() => {
     const csvData: string[][] = [];
     csvData.push(["Concepto", "Monto", "Fecha", "Usuario"]);
