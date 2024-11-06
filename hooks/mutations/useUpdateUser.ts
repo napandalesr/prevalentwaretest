@@ -10,15 +10,15 @@ mutation UpdateUser($updateUserId: String!, $name: String!, $role: Role!, $phone
     phone
   }
 }
-`
+`;
 
 export const useUpdateUser = (): {
-  useHandleUpdateUser: (data: userType) => Promise<FetchResult<any>>;
+  UseHandleUpdateUser: (data: userType) => Promise<FetchResult<any>>;
   mutationUserUpdateLoading: boolean;
   mutationUserUpdateError: ApolloError | undefined;
 } => {
   const [updateUser, { loading: mutationUserUpdateLoading, error: mutationUserUpdateError }] = useMutation(UpdateUser);
-  const useHandleUpdateUser = async (data: userType) => {
+  const UseHandleUpdateUser = async (data: userType) => {
    return await updateUser({
       variables: {
         ...data
@@ -26,5 +26,5 @@ export const useUpdateUser = (): {
     });
   }
   
-  return { useHandleUpdateUser, mutationUserUpdateLoading, mutationUserUpdateError }
+  return { UseHandleUpdateUser, mutationUserUpdateLoading, mutationUserUpdateError }
 }

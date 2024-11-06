@@ -1,8 +1,8 @@
 "use client"
 
+import { columnType, dataSourceUser } from '@/types';
 import React from 'react';
 
-import { columnType, dataSourceUser } from '@/types/table';
 
 type props = {
   columns: columnType[];

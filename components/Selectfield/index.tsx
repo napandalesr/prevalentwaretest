@@ -1,6 +1,6 @@
 "use client";
 
-import React, {HTMLInputTypeAttribute, useEffect, useState} from "react";
+import React, { useState } from "react";
 
 type props = {
   required?: boolean,
@@ -28,10 +28,6 @@ export const Selectfield = (
     const baseLabel: string = `bg-transparent absolute ${hasText ? "top-0" : "top-6"} transition-all duration-150 ease-in-out peer-focus:top-0 left-6 peer-focus:text-custom-primary peer-focus:font-bold`;
     const innerClassName: string = `bg-transparent h-full w-full px-6 pt-6 pb-2 peer outline-none resize-none border-b-2 border-custom-text transition-all duration-150 ease-in-out focus:border-custom-primary focus:text-custom-primary`;
 
-    useEffect(() => {
-      console.log("defaultValue", defaultValue);
-    }, [defaultValue]);
-
     function handleChangeSelect(e: React.ChangeEvent<HTMLSelectElement>) {
       const text = e.target.value.trim();
       setHasText(text !== undefined && text !== "");
@@ -44,7 +40,7 @@ export const Selectfield = (
       <select name={name} onChange={(e) => {handleChangeSelect(e)}} className={innerClassName} defaultValue={defaultValue}>
         <option value=""></option>
         {
-          options.map(item =><option value={item.value}>{item.text}</option> )
+          options.map((item, index) =><option key={index} value={item.value}>{item.text}</option> )
         }
       </select>
         {

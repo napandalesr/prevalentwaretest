@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from "@apollo/client/testing";
 import { SessionProvider } from 'next-auth/react';
-
-import Home from './page';
+import Reports from './page';
 import { useGetMovementsMock } from '@/__mocks__/hooks/queries/useGetMovementsMock';
 
 const session = {
@@ -13,14 +12,16 @@ const session = {
   expires: '2024-11-05T00:00:00.000Z',
 };
 
-describe('Layout component', () => {
-  it('renders layout', () => {
+
+describe('Reports component', () => {
+  it('renders usuarios', () => {
     render(
       <MockedProvider mocks={useGetMovementsMock} addTypename={false}>
         <SessionProvider session={session}>
-          <Home/>
+          <Reports/>
         </SessionProvider>
       </MockedProvider>
+      
     );
     expect(screen.getByText('Cargando...')).toBeInTheDocument();
   });

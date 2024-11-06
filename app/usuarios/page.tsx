@@ -13,8 +13,6 @@ import { dataSourceUser, userType } from '@/types/user';
 import { useUpdateUser } from '@/hooks/mutations/useUpdateUser';
 import Alert from '@/components/Alert';
 
-import { useFindByEmail } from '@/hooks/queries/useGetUserByEmail';
-
 const columns: columnType[] = [
   {
     key: "1",
@@ -50,7 +48,7 @@ const Users = () => {
   }); 
   const { dataSourceUsers, loadingUsers, errorUsers, refetchUsers } = useGetUsers();
   const [datasource, setDatasource] = useState<dataSourceUser[]>();
-  const { useHandleUpdateUser, mutationUserUpdateLoading } = useUpdateUser();
+  const { UseHandleUpdateUser, mutationUserUpdateLoading } = useUpdateUser();
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -75,7 +73,7 @@ const Users = () => {
   useEffect(() => {
     if(dataSourceUsers) {
       const newData: dataSourceUser[] = []
-      dataSourceUsers.findUsers.map((item: any) => {
+      dataSourceUsers.findUsers.map((item: dataSourceUser) => {
         newData.push({
           ...item,
           actions: <span className='bg-white' style={{backgroundColor: "#EA7402", color: "#fff", padding: '0.5rem 1rem', borderRadius: "1rem"}}>
@@ -94,7 +92,7 @@ const Users = () => {
   /**Actualización de datos de usuario */
   const handleUpdateUser = async (data: userType) => {
     try {
-      const response = await useHandleUpdateUser(data);
+      const response = await UseHandleUpdateUser(data);
       if(response.data) {
         setActiveAlert({
           key: activeAlert.key+1,

@@ -1,8 +1,7 @@
+import { prisma } from '@/prisma';
 import NextAuth from 'next-auth';
 import Auth0Provider from 'next-auth/providers/auth0';
-const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient();
 
 const handler = NextAuth({
   providers: [
@@ -13,17 +12,17 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
+    async session({ session }) {
       if(session.user) {
         const dbUser = await prisma.user.findUnique({
-          where: { email: session.user.email || '' },
+          where: { email: session.user.email ?? '' },
         });
   
         if (dbUser) {
           session.user.role = dbUser.role;
         }else {
           await prisma.user.create(
-            { data: { email: user.email, name: user.email, role: 'USER'} }
+            { data: { email: session.user.email ?? '', name: session.user?.name ?? '', role: 'USER'} }
           );
         }
       }

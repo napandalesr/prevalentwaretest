@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 
 import { Table, ModalIncome } from "@/containers";
 import { useGetMovements } from "@/hooks/queries/useGetMovements";
-import { useCreateMovement } from "@/hooks/mutations/useCreateMovement";
+import { UseCreateMovement } from "@/hooks/mutations/useCreateMovement";
 import Loading from "@/components/Loading";
 import Alert from "@/components/Alert";
 import { columnType, MovementType } from "@/types";
@@ -40,7 +40,7 @@ export default function Home() {
   }); 
   const [total, setTotal] = useState<number>(0);
   const { findMovement, loadingMovement, errorMovement, refetchMovement } = useGetMovements();
-  const { useHandleCreateMovement, mutationLoading } = useCreateMovement()
+  const { UseHandleCreateMovement, mutationLoading } = UseCreateMovement()
   const { data: session } = useSession();
 
   /**Calcula la suma de movimientos */
@@ -61,7 +61,7 @@ export default function Home() {
   /**Crear un nuevo movimiento */
   const handleCreateMovement = async (data: MovementType) => {
     try {
-      const response = await useHandleCreateMovement(data);
+      const response = await UseHandleCreateMovement(data);
       if(response.data) {
         setActiveAlert({
           key: activeAlert.key+1,

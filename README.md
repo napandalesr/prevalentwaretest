@@ -17,3 +17,16 @@ bun dev
 ## Versions
 - node -> 20.9.0
 - npm -> 10.8.3
+
+### Patrones
+
+- Container-Component
+- Presentation Components
+
+## Vercel
+
+https://prevalentwaretest.vercel.app/
+
+## Usuario de prueba
+- correo: napandalesrtest@gmail.com
+- contraseña: 12345ABcd@

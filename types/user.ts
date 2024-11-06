@@ -9,6 +9,8 @@ export type userType = {
 }
 
 export type dataSourceUser = {
+  id?: string | undefined;
+  role?: "USER" | "ADMIN" | undefined;
   key: number;
   name: string;
   email: string;

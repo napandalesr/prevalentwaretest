@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -19,7 +19,7 @@ import { useGetMovements } from '@/hooks/queries/useGetMovements';
 import { useGetLasMovements } from '@/hooks/queries/useGetLasMovements';
 import Csv from '@/components/Csv';
 import { graphType } from '@/types/chart';
-import { useFindByEmail } from '@/hooks/queries/useGetUserByEmail';
+import { dataSourceMovement } from '@/types';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -43,13 +43,13 @@ const Reports = () => {
   /**Actualización de datos para la grafica con últimos 4 movimientos al rendizar nuevamenta la pagina */
   useEffect(() => {
     if(getLastMovements) {
-      const labels: any[] = [];
-      const dataNumbers: any[] = []
-      getLastMovements.getLastMovements.map((item: any) => {
+      const labels: string[] = [];
+      const dataNumbers: number[] = []
+      getLastMovements.getLastMovements.map((item: dataSourceMovement) => {
         if(item.type == 'EXPENSE') {
           dataNumbers.push(-item.amount)
         }
-        dataNumbers.push(item.amount)
+        dataNumbers.push(parseFloat(item.amount))
         labels.push(item.date);
       });
       setDatasource({
