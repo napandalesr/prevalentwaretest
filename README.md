@@ -30,3 +30,14 @@ https://prevalentwaretest.vercel.app/
 ## Usuario de prueba
 - correo: napandalesrtest@gmail.com
 - contraseña: 12345ABcd@
+
+## .env
+
+AUTH0_CLIENT_ID="t0Dzmle9LFYaCEP69jslt6Hc4y1giMcJ"
+AUTH0_DOMAIN="dev-uql3eedgfqwljufy.us.auth0.com"
+AUTH0_BASE_URL="http://localhost:3000"
+AUTH0_CLIENT_SECRET="-f0KVDU_k4K7UogwT41SQc4dmwYCVmYEGl4XpG7i3S8uQxYcX5SHmFFGzEbP0OT-"
+AUTH0_ISSUER_BASE_URL="https://dev-uql3eedgfqwljufy.us.auth0.com"
+AUTH0_SECRET="-f0KVDU_k4K7UogwT41SQc4dmwYCVmYEGl4XpG7i3S8uQxYcX5SHmFFGzEbP0OT-"
+
+DATABASE_URL="postgresql://postgres.uexloahlxotiwwqtdnzp:1GKGbvtb0sDcZXrs@aws-0-us-west-1.pooler.supabase.com:5432/postgres"
